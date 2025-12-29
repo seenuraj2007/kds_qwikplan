@@ -123,25 +123,20 @@ export default function Home() {
   }
 
   // --- Google OAuth Handler ---
- // Replace your existing handleGoogleLogin function
+// Replace the import at the top
+
+// Use this in your handleGoogleLogin function:
 async function handleGoogleLogin() {
   setLoading(true)
   setError(null)
   
   try {
-    // Get the current origin - works both locally and in production
     const redirectUrl = `${window.location.origin}/auth/callback`
     
-    console.log('Redirecting to:', redirectUrl) // Debug log
-    
-    const { error } = await supabase.auth.signInWithOAuth({
+    const { error } = await supabase.auth.signInWithOAuth({ // ✅ Use existing supabase
       provider: 'google',
       options: {
         redirectTo: redirectUrl,
-        queryParams: {
-          access_type: 'offline',
-          prompt: 'consent',
-        }
       }
     })
     
