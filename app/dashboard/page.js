@@ -51,9 +51,10 @@ export default function Dashboard() {
         console.log(">>> Step 1: Checking Session...")
         const { data: { session } } = await supabase.auth.getSession()
 
+        // app/dashboard/page.js (Line approx 25)
         if (!session) {
           console.log(">>> Session is null. Redirecting to home.")
-          router.push('/')
+          router.push('/') // <--- CHANGE THIS
           return
         } else {
           console.log(">>> Session Found. User ID:", session.user.id)
@@ -186,56 +187,56 @@ export default function Dashboard() {
   }
 
 
-// unlimited useage for testing
-//   async function handleGenerate() {
-//   if (!niche.trim()) {
-//     showToast('Please enter your business niche', 'error')
-//     return
-//   }
+  // unlimited useage for testing
+  //   async function handleGenerate() {
+  //   if (!niche.trim()) {
+  //     showToast('Please enter your business niche', 'error')
+  //     return
+  //   }
 
-//   setLoading(true)
-//   setResult(null)
+  //   setLoading(true)
+  //   setResult(null)
 
-//   try {
-//     const { data: { session } } = await supabase.auth.getSession()
-//     const currentUserId = session.user.id
+  //   try {
+  //     const { data: { session } } = await supabase.auth.getSession()
+  //     const currentUserId = session.user.id
 
-//     const res = await fetch('/api/generate', {
-//       method: 'POST',
-//       headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({ 
-//         niche, 
-//         audience, 
-//         platform, 
-//         goal,
-//         userId: currentUserId 
-//       })
-//     })
+  //     const res = await fetch('/api/generate', {
+  //       method: 'POST',
+  //       headers: { 'Content-Type': 'application/json' },
+  //       body: JSON.stringify({ 
+  //         niche, 
+  //         audience, 
+  //         platform, 
+  //         goal,
+  //         userId: currentUserId 
+  //       })
+  //     })
 
-//     // Don't check for 429 status anymore during testing
-//     const data = await res.json()
-    
-//     // Check for other errors
-//     if (data.error && !data.error.includes('Monthly limit reached')) {
-//       showToast(data.error || 'Something went wrong', 'error')
-//       setLoading(false)
-//       return
-//     }
+  //     // Don't check for 429 status anymore during testing
+  //     const data = await res.json()
 
-//     setResult(data)
-//     setShowModal(true)
-//     showToast('Marketing Plan Generated Successfully!', 'success')
-    
-//     // Optional: Still update local usage count if you want to track
-//     setRealUsage(prev => prev + 1)
+  //     // Check for other errors
+  //     if (data.error && !data.error.includes('Monthly limit reached')) {
+  //       showToast(data.error || 'Something went wrong', 'error')
+  //       setLoading(false)
+  //       return
+  //     }
 
-//   } catch (err) {
-//     console.error('Fetch error:', err)
-//     showToast('Network error.', 'error')
-//   } finally {
-//     setLoading(false)
-//   }
-// }
+  //     setResult(data)
+  //     setShowModal(true)
+  //     showToast('Marketing Plan Generated Successfully!', 'success')
+
+  //     // Optional: Still update local usage count if you want to track
+  //     setRealUsage(prev => prev + 1)
+
+  //   } catch (err) {
+  //     console.error('Fetch error:', err)
+  //     showToast('Network error.', 'error')
+  //   } finally {
+  //     setLoading(false)
+  //   }
+  // }
 
   // 5. Render
   return (
