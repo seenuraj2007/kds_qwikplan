@@ -1,41 +1,100 @@
 
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# KDS QwikPlan 🚀
 
-## Getting Started
+A next-generation AI-powered Marketing Strategy Generator built for modern creators and businesses. This application leverages the power of AI to generate comprehensive marketing plans in seconds based on niche, audience, platform, and goals.
 
-First, run the development server:
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Next.js](https://img.shields.io/badge/Next.js-14-black)
+![Supabase](https://img.shields.io/badge/Supabase-3ECFF8?logo=supabase&logoColor=white)
+
+## 🌟 Features
+
+-   **AI-Powered Strategy Generation:** Instantly creates marketing plans using advanced AI logic.
+-   **User Authentication:** Secure sign-up and login system using Supabase Auth.
+-   **Usage Tracking & Limits:** Built-in dashboard to monitor monthly credit usage (Free Tier: 10 credits).
+-   **Responsive UI:** Beautiful, mobile-first design built with Tailwind CSS.
+-   **Interactive Components:** Includes Toast notifications, Result Modals, and Welcome Animations.
+-   **Smart Filtering:** Generate strategies tailored for Instagram, Facebook, LinkedIn, or Twitter.
+
+## 🛠 Tech Stack
+
+-   **Frontend:** Next.js 14 (App Router), React
+-   **Styling:** Tailwind CSS
+-   **Backend/Database:** Supabase (PostgreSQL & Auth)
+-   **Icons:** Lucide React (implied usage of icons)
+
+## 📸 Screenshots
+
+<!-- Add screenshots here if you have them -->
+<!-- 
+![Dashboard](/path/to/screenshot.png) 
+-->
+
+## 🚀 Getting Started
+
+To get a local copy up and running, follow these simple steps.
+
+### Prerequisites
+
+-   Node.js installed on your machine.
+-   A Supabase project (Create one at [supabase.com](https://supabase.com)).
+-   An OpenAI API Key (Optional, if your API backend requires it).
+
+### Installation
+
+1.  **Clone the repo**
+    ```bash
+    git clone https://github.com/seenuraj2007/kds_qwikplan.git
+    ```
+
+2.  **Install NPM packages**
+    ```bash
+    npm install
+    # or
+    yarn install
+    # or
+    pnpm install
+    ```
+
+3.  **Run the Development Server**
+
+    ```bash
+    npm run dev
+    ```
+
+    Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## 📁 Project Structure
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+kds_qwikplan/
+├── app/
+│   ├── components/       # Reusable components (UsageCard, ResultModal)
+│   ├── dashboard/        # Main dashboard page
+│   └── layout.tsx        # Root layout
+├── public/               # Static assets
+├── .env.local            # Environment variables
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ⚙️ API Routes
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+The application uses a secure API route (`/api/generate`) to handle generation requests. It validates the user's session via the Authorization header before deducting usage credits.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🤝 Contributing
 
-## Learn More
+Contributions are what make the open-source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-To learn more about Next.js, take a look at the following resources:
+1.  Fork the Project
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3.  Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4.  Push to the Branch (`git push origin feature/AmazingFeature`)
+5.  Open a Pull Request
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📝 License
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Distributed under the MIT License. See `LICENSE` for more information.
 
-## Deploy on Vercel
+## 👤 Author
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-=======
-# tamil-reel-helper
-
-# kds_qwikplan
+**Seenuraj2007** - [GitHub](https://github.com/seenuraj2007)
