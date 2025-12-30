@@ -196,12 +196,12 @@ export default function LandingPage() {
               </div>
               <div className="flex-1 font-mono text-xs text-emerald-400 bg-black/50 p-4 rounded-lg border border-white/10">
                 <span className="text-pink-400">const</span> config = &#123;<br/>
-                &nbsp;&nbsp;apiKey: <span className="text-yellow-300">"..."</span>,<br/>
-                &nbsp;&nbsp;mode: <span className="text-yellow-300">"aggressive"</span>,<br/>
-                &nbsp;&nbsp;platform: <span className="text-yellow-300">"instagram"</span><br/>
-                &#125;;<br/>
-                <br/>
-                <span className="text-pink-400">await</span> generate(config);
+                 &nbsp;&nbsp;apiKey: <span className="text-yellow-300">&quot;...&quot;</span>,<br/>
+                 &nbsp;&nbsp;mode: <span className="text-yellow-300">&quot;aggressive&quot;</span>,<br/>
+                 &nbsp;&nbsp;platform: <span className="text-yellow-300">&quot;instagram&quot;</span><br/>
+                 &#125;;<br/>
+                 <br/>
+                 <span className="text-pink-400">await</span> generate(config);
               </div>
             </div>
           </div>
