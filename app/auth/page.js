@@ -12,7 +12,6 @@ export default function Home() {
   const [isLogin, setIsLogin] = useState(true)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [isCheckingSession, setIsCheckingSession] = useState(true)
 
   // --- Form States ---
   const [name, setName] = useState('')
@@ -26,9 +25,8 @@ export default function Home() {
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession()
       if (session) {
+        console.log('User already logged in, redirecting...')
         router.push('/dashboard')
-      } else {
-        setIsCheckingSession(false)
       }
     }
     
@@ -43,14 +41,6 @@ export default function Home() {
     
     return () => subscription.unsubscribe()
   }, [router])
-
-  if (isCheckingSession) {
-    return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="text-slate-500">Loading...</div>
-      </div>
-    )
-  }
 
 
   // --- Validation Helpers ---
