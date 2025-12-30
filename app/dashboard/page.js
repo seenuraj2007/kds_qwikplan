@@ -2,18 +2,12 @@
 
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@supabase/supabase-js'
+import { supabase } from '../../lib/supabaseClient'
 
 // --- IMPORT COMPONENTS ---
 import UsageCard from '../../app/components/UsageCard'
 import ResultModal from '../../app/components/ResultModal'
 import WelcomeAnimation from '../../app/components/WelcomeAnimation' // Import the animation
-
-// --- SUPABASE CLIENT ---
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
 
 export default function Dashboard() {
   const router = useRouter()
