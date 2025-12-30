@@ -1,7 +1,7 @@
-// app/api/generate/route.js
 import { NextResponse } from 'next/server'
 import { Groq } from 'groq-sdk'
 import { createClient } from '@supabase/supabase-js'
+import { checkRateLimit } from '../../lib/rate-limit' // --- ADD THIS LINE ---
 
 // Supabase Client
 const supabase = createClient(
@@ -18,20 +18,43 @@ export async function POST(req) {
     const { niche, audience, platform, goal, userId } = body
 
     // --- 3. Validation ---
+    // --- 3. Validation ---
     if (!niche || !platform || !goal) {
       return NextResponse.json({ error: 'Missing fields' }, { status: 400 })
     }
 
+    // --- 3.5. SECURITY: Verify Session (Anti-Impersonation) ---
+    const { data: { session } } = await supabase.auth.getSession()
+    
+    if (!session || !session.user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const serverUserId = session.user.id
+
+    // --- 3.6. SECURITY: Check Rate Limit (Anti-Spam) ---
+    const rateCheck = checkRateLimit(serverUserId)
+    
+    if (!rateCheck.success) {
+      // Calculate remaining time in seconds
+      const waitTime = Math.ceil((rateCheck.retryAfter - Date.now()) / 1000)
+      return NextResponse.json({ 
+        error: `Too many requests. Please wait ${waitTime} seconds.`,
+        retryAfter: rateCheck.retryAfter
+      }, { status: 429 })
+    }
+
+    // --- 4. Safe DB Check (Handle Multiple Rows) ---
     // --- 4. Safe DB Check (Handle Multiple Rows) ---
     let currentUsage = 0
-    let limit = 10
+    let limit = 30
     let profileId = null
 
-    // FIX: Use array method instead of maybeSingle()
+    // FIX: Use serverUserId (Verified Session) instead of body userId
     const { data: profiles, error: fetchError } = await supabase
       .from('profiles')
       .select('id, plan_usage, monthly_limit')
-      .eq('user_id', userId)
+      .eq('user_id', serverUserId)
 
     if (fetchError) {
       console.error('Fetch Error:', fetchError)
