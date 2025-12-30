@@ -66,7 +66,7 @@ export default function Dashboard() {
           // Use array method to handle multiple rows
           const { data: profiles, error } = await supabase
             .from('profiles')
-            .select('plan_usage, monthly_limit')
+            .select('id, plan_usage, monthly_limit')
             .eq('user_id', session.user.id)
 
           if (error) {
@@ -145,25 +145,45 @@ export default function Dashboard() {
     setResult(null)
 
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      const currentUserId = session.user.id
+      const {
+        data: { session },
+      } = await supabase.auth.getSession()
+
+      const accessToken = session?.access_token
+      if (!accessToken) {
+        showToast('Session expired. Please log in again.', 'error')
+        router.push('/auth')
+        return
+      }
 
       const res = await fetch('/api/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({
-          niche: niche,
+          niche,
           audience,
           platform,
           goal,
-          userId: currentUserId
-        })
+        }),
       })
 
       if (!res.ok) {
-        const errorData = await res.json()
+        let errorData = {}
+        try {
+          errorData = await res.json()
+        } catch {
+          errorData = {}
+        }
+
         showToast(errorData.error || 'Something went wrong', 'error')
-        setLoading(false)
+
+        if (res.status === 401) {
+          router.push('/auth')
+        }
+
         return
       }
 

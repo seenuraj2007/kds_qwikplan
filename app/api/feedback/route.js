@@ -1,166 +1,181 @@
 import { NextResponse } from 'next/server'
 import { Resend } from 'resend'
 import { createClient } from '@supabase/supabase-js'
+import { createServerClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-// Initialize Supabase
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL,
-  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-)
+function getBearerToken(req) {
+  const authHeader = req.headers.get('authorization')
+  if (!authHeader) return null
 
-// Initialize Resend
-const resend = new Resend(process.env.RESEND_API_KEY)
+  const match = authHeader.match(/^Bearer\s+(.+)$/i)
+  return match?.[1] || null
+}
+
+function createSupabaseFromBearerToken(token) {
+  return createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      global: {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+        detectSessionInUrl: false,
+      },
+    }
+  )
+}
+
+function createSupabaseFromCookies(cookieStore) {
+  return createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    {
+      cookies: {
+        get(name) {
+          return cookieStore.get(name)?.value
+        },
+        set(name, value, options) {
+          cookieStore.set({ name, value, ...options })
+        },
+        remove(name, options) {
+          cookieStore.set({ name, value: '', ...options })
+        },
+      },
+    }
+  )
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;')
+}
 
 export async function POST(req) {
   try {
-    // 1. Parse the request body
-    const body = await req.json()
-    const { feedbackText, userId, userEmail, niche, platform } = body
+    let body
+    try {
+      body = await req.json()
+    } catch {
+      return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+    }
 
-    console.log(">>> Received feedback:", {
-      userId,
-      userEmail,
-      niche,
-      platform,
-      feedbackLength: feedbackText?.length
-    })
+    const feedbackText =
+      typeof body?.feedbackText === 'string' ? body.feedbackText.trim() : ''
+    const niche = typeof body?.niche === 'string' ? body.niche.trim() : null
+    const platform = typeof body?.platform === 'string' ? body.platform.trim() : null
 
-    // 2. Validate required fields
-    if (!feedbackText || !userId) {
+    if (!feedbackText) {
       return NextResponse.json(
-        { error: 'Missing required fields: feedbackText and userId' },
+        { error: 'Missing required field: feedbackText' },
         { status: 400 }
       )
     }
 
-    // 3. First, check if feedback table exists, create if not
-    console.log(">>> Step 1: Checking/creating feedback table...")
-    
-    // Try to insert into feedback table
-    const { error: insertError } = await supabase
-      .from('feedback')
-      .insert({
-        user_id: userId,
-        user_email: userEmail || null,
-        feedback_text: feedbackText,
-        niche: niche || null,
-        platform: platform || null,
-        created_at: new Date().toISOString()
-      })
+    if (feedbackText.length > 2000) {
+      return NextResponse.json(
+        { error: 'Feedback is too long' },
+        { status: 400 }
+      )
+    }
+
+    const bearerToken = getBearerToken(req)
+    const cookieStore = cookies()
+
+    const supabase = bearerToken
+      ? createSupabaseFromBearerToken(bearerToken)
+      : createSupabaseFromCookies(cookieStore)
+
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser()
+
+    if (userError || !user) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
+    const { error: insertError } = await supabase.from('feedback').insert({
+      user_id: user.id,
+      user_email: user.email || null,
+      feedback_text: feedbackText,
+      niche,
+      platform,
+      created_at: new Date().toISOString(),
+    })
 
     if (insertError) {
-      console.error(">>> DB Insert Error:", insertError)
-      
-      // If table doesn't exist, create it first
-      if (insertError.code === '42P01') { // Table doesn't exist
-        console.log(">>> Creating feedback table...")
-        
-        // You'll need to create the table manually in Supabase first
-        // Or use SQL query with service role key
-        return NextResponse.json(
-          { error: 'Feedback table not set up. Please create it in Supabase.' },
-          { status: 500 }
-        )
-      }
-      
+      console.error('Feedback insert error:', insertError)
       return NextResponse.json(
-        { error: 'Failed to save feedback to database' },
+        { error: 'Failed to save feedback' },
         { status: 500 }
       )
     }
 
-    console.log(">>> Step 2: Feedback saved to DB successfully")
+    const resendApiKey = process.env.RESEND_API_KEY
+    const toListRaw =
+      process.env.FEEDBACK_TO_EMAILS ||
+      process.env.FEEDBACK_TO_EMAIL ||
+      process.env.FEEDBACK_NOTIFICATION_EMAIL
 
-    // 4. Send email via Resend (if API key exists)
-    if (process.env.RESEND_API_KEY) {
-      console.log(">>> Step 3: Attempting to send email...")
-      
+    const to = toListRaw
+      ? toListRaw
+          .split(',')
+          .map((e) => e.trim())
+          .filter(Boolean)
+      : []
+
+    if (resendApiKey && to.length > 0) {
+      const resend = new Resend(resendApiKey)
+
+      const from = process.env.RESEND_FROM || 'BizPlan AI <onboarding@resend.dev>'
+
+      const safeFeedbackText = escapeHtml(feedbackText)
+      const safeNiche = niche ? escapeHtml(niche) : 'Not specified'
+      const safePlatform = platform ? escapeHtml(platform) : 'Not specified'
+      const safeUserEmail = user.email ? escapeHtml(user.email) : 'Not provided'
+      const safeUserId = escapeHtml(user.id)
+
       try {
-        const { data, error } = await resend.emails.send({
-          from: 'BizPlan AI <onboarding@resend.dev>', // Replace with your verified domain
-          to: ['214seenuraja@gmail.com'], // 👈 YOUR EMAIL HERE
-          subject: `📝 New Feedback: ${niche || 'Unknown Niche'}`,
+        const { error } = await resend.emails.send({
+          from,
+          to,
+          subject: `New Feedback: ${niche || 'Unknown Niche'}`,
           html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-              <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 20px; text-align: center; color: white;">
-                <h1 style="margin: 0;">🚀 New BizPlan AI Feedback</h1>
-              </div>
-              
-              <div style="padding: 30px; background: #f9fafb;">
-                <div style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                  
-                  <h3 style="color: #374151; margin-top: 0;">Feedback Details</h3>
-                  
-                  <table style="width: 100%; border-collapse: collapse;">
-                    <tr>
-                      <td style="padding: 8px 0; color: #6b7280; width: 120px;"><strong>User ID:</strong></td>
-                      <td style="padding: 8px 0;">${userId}</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 8px 0; color: #6b7280;"><strong>Email:</strong></td>
-                      <td style="padding: 8px 0;">${userEmail || 'Not provided'}</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 8px 0; color: #6b7280;"><strong>Niche:</strong></td>
-                      <td style="padding: 8px 0;">${niche || 'Not specified'}</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 8px 0; color: #6b7280;"><strong>Platform:</strong></td>
-                      <td style="padding: 8px 0;">${platform || 'Not specified'}</td>
-                    </tr>
-                  </table>
-                  
-                  <div style="margin-top: 20px; padding: 15px; background: #f3f4f6; border-left: 4px solid #10b981; border-radius: 4px;">
-                    <p style="margin: 0 0 8px 0; color: #374151;"><strong>Feedback:</strong></p>
-                    <p style="margin: 0; color: #4b5563; font-style: italic;">"${feedbackText}"</p>
-                  </div>
-                  
-                  <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #e5e7eb; text-align: center;">
-                    <p style="color: #9ca3af; font-size: 12px;">
-                      Sent from BizPlan AI Dashboard • ${new Date().toLocaleString()}
-                    </p>
-                  </div>
-                </div>
-              </div>
+              <h2>New BizPlan AI Feedback</h2>
+              <p><strong>User ID:</strong> ${safeUserId}</p>
+              <p><strong>Email:</strong> ${safeUserEmail}</p>
+              <p><strong>Niche:</strong> ${safeNiche}</p>
+              <p><strong>Platform:</strong> ${safePlatform}</p>
+              <hr />
+              <p><strong>Feedback:</strong></p>
+              <p style="white-space: pre-wrap;">${safeFeedbackText}</p>
             </div>
           `,
-          text: `New feedback received from user ${userId} (${userEmail || 'no email'}).
-          
-Niche: ${niche || 'Not specified'}
-Platform: ${platform || 'Not specified'}
-
-Feedback:
-"${feedbackText}"
-
-Sent: ${new Date().toLocaleString()}
-          `
+          text: `New feedback received\n\nUser: ${user.id} (${user.email || 'no email'})\nNiche: ${niche || 'Not specified'}\nPlatform: ${platform || 'Not specified'}\n\nFeedback:\n${feedbackText}`,
         })
 
         if (error) {
-          console.error(">>> Resend Error:", error)
-          // Don't fail the request if email fails
-        } else {
-          console.log(">>> Email sent successfully!")
+          console.error('Resend send error:', error)
         }
       } catch (emailError) {
-        console.error(">>> Email Exception:", emailError)
-        // Continue anyway
+        console.error('Resend send exception:', emailError)
       }
-    } else {
-      console.log(">>> No RESEND_API_KEY found, skipping email")
     }
 
-    // 5. Return success
-    return NextResponse.json({ 
-      success: true, 
-      message: 'Feedback saved successfully' 
-    })
-
+    return NextResponse.json({ success: true })
   } catch (error) {
-    console.error('>>> Server Error:', error)
-    return NextResponse.json(
-      { error: 'Internal server error', details: error.message },
-      { status: 500 }
-    )
+    console.error('Feedback route error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
