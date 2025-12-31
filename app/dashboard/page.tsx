@@ -439,7 +439,9 @@ export default function Dashboard() {
               showModal={showModal}
               result={result}
               niche={niche}
+              audience={audience}
               platform={platform}
+              goal={goal}
               showToast={showToast}
               onClose={() => setShowModal(false)}
               userId={userId}

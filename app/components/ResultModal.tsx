@@ -2,6 +2,7 @@
 
 import { useState, ChangeEvent } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import SaveTemplateForm from './SaveTemplateForm'
 
 interface ResultModalProps {
   showModal: boolean
@@ -13,7 +14,9 @@ interface ResultModalProps {
     hashtags?: string
   } | null
   niche: string
+  audience: string
   platform: string
+  goal: string
   showToast: (message: string, type: 'success' | 'error') => void
   onClose: () => void
   userId: string
@@ -24,10 +27,13 @@ export default function ResultModal({
   showModal,
   result,
   niche,
+  audience,
   platform,
+  goal,
   showToast,
   onClose,
 }: ResultModalProps) {
+  const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false)
   const [feedbackText, setFeedbackText] = useState('')
   const [feedbackSent, setFeedbackSent] = useState(false)
   const [isSending, setIsSending] = useState(false)
@@ -295,6 +301,12 @@ export default function ResultModal({
                   Copy All
                 </button>
                 <button
+                  onClick={() => setShowSaveTemplateModal(true)}
+                  className="bg-gradient-to-r from-emerald-500 to-teal-500 text-white px-6 py-2.5 rounded-lg font-semibold hover:from-emerald-600 hover:to-teal-600 transition-all duration-200 transform hover:scale-105 text-xs shadow-md hover:shadow-lg"
+                >
+                  Save as Template
+                </button>
+                <button
                   onClick={onClose}
                   className="bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105 text-sm shadow-md hover:shadow-lg"
                 >
@@ -304,6 +316,23 @@ export default function ResultModal({
             </div>
           </div>
         </div>
+      )}
+
+      {/* Save Template Modal */}
+      {showSaveTemplateModal && result && (
+        <SaveTemplateForm
+          showModal={showSaveTemplateModal}
+          result={result}
+          niche={niche}
+          audience={audience}
+          platform={platform}
+          goal={goal}
+          onClose={() => setShowSaveTemplateModal(false)}
+          onSaveSuccess={(templateId, name) => {
+            console.log('Template saved:', templateId, name)
+          }}
+          showToast={showToast}
+        />
       )}
     </>
   )
