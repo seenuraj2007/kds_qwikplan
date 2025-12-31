@@ -1,6 +1,12 @@
-export default function UsageCard({ userEmail, usage, limit }) {
+interface UsageCardProps {
+  userEmail: string
+  usage: number
+  limit: number
+}
+
+export default function UsageCard({ userEmail, usage, limit }: UsageCardProps) {
   const percentage = Math.min((usage / limit) * 100, 100)
-  
+
 
   return (
     <div className="lg:col-span-1 space-y-6">

@@ -1,13 +1,27 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { supabase } from '../../lib/supabaseClient'
 
 // --- IMPORT COMPONENTS ---
 import UsageCard from '../../app/components/UsageCard'
 import ResultModal from '../../app/components/ResultModal'
-import WelcomeAnimation from '../../app/components/WelcomeAnimation' // Import the animation
+import WelcomeAnimation from '../../app/components/WelcomeAnimation'
+
+interface PlanResult {
+  strategy: string
+  proTip?: string
+  bestPostTime?: string
+  schedule: string[]
+  hashtags?: string
+}
+
+interface Toast {
+  show: boolean
+  msg: string
+  type: 'success' | 'error'
+}
 
 export default function Dashboard() {
   const router = useRouter()
@@ -15,7 +29,7 @@ export default function Dashboard() {
   // --- User Info State ---
   const [userEmail, setUserEmail] = useState('')
   const [loadingAuth, setLoadingAuth] = useState(true)
-  const [userId, setUserId] = useState(null)
+  const [userId, setUserId] = useState<string | null>(null)
 
   // --- Tool State ---
   const [niche, setNiche] = useState('')
@@ -23,13 +37,13 @@ export default function Dashboard() {
   const [platform, setPlatform] = useState('instagram')
   const [goal, setGoal] = useState('sales')
   const [loading, setLoading] = useState(false)
-  const [result, setResult] = useState(null)
+  const [result, setResult] = useState<PlanResult | null>(null)
 
   // --- Pop-up Modal State ---
   const [showModal, setShowModal] = useState(false)
 
   // --- Toast Notification State ---
-  const [toast, setToast] = useState({ show: false, msg: '', type: 'success' })
+  const [toast, setToast] = useState<Toast>({ show: false, msg: '', type: 'success' })
 
   // --- Real Usage States ---
   const [realUsage, setRealUsage] = useState(0)
@@ -45,14 +59,14 @@ export default function Dashboard() {
         console.log(">>> Step 1: Checking Session...")
         const { data: { session } } = await supabase.auth.getSession()
 
-        // app/dashboard/page.js (Line approx 25)
+        // app/dashboard/page.ts (Line approx 25)
         if (!session) {
           console.log(">>> Session is null. Redirecting to home.")
           router.push('/') // <--- CHANGE THIS
           return
         } else {
           console.log(">>> Session Found. User ID:", session.user.id)
-          setUserEmail(session.user.email)
+          setUserEmail(session.user.email ?? '')
           setUserId(session.user.id)
 
           console.log(">>> Step 2: Fetching Profile from DB...")
@@ -115,7 +129,7 @@ export default function Dashboard() {
   }
 
   // 2. Toast Helper
-  function showToast(message, type = 'success') {
+  function showToast(message: string, type: 'success' | 'error' = 'success') {
     setToast({ show: true, msg: message, type })
     setTimeout(() => {
       setToast({ show: false, msg: '', type })
@@ -165,14 +179,14 @@ export default function Dashboard() {
       })
 
       if (!res.ok) {
-        let errorData = {}
+        let errorData: Record<string, unknown> = {}
         try {
           errorData = await res.json()
         } catch {
           errorData = {}
         }
 
-        showToast(errorData.error || 'Something went wrong', 'error')
+        showToast((errorData.error as string) || 'Something went wrong', 'error')
 
         if (res.status === 401) {
           router.push('/auth')

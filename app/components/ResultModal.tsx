@@ -1,7 +1,24 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, ChangeEvent } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+
+interface ResultModalProps {
+  showModal: boolean
+  result: {
+    strategy: string
+    proTip?: string
+    bestPostTime?: string
+    schedule: string[]
+    hashtags?: string
+  } | null
+  niche: string
+  platform: string
+  showToast: (message: string, type: 'success' | 'error') => void
+  onClose: () => void
+  userId: string
+  userEmail: string
+}
 
 export default function ResultModal({
   showModal,
@@ -10,7 +27,7 @@ export default function ResultModal({
   platform,
   showToast,
   onClose,
-}) {
+}: ResultModalProps) {
   const [feedbackText, setFeedbackText] = useState('')
   const [feedbackSent, setFeedbackSent] = useState(false)
   const [isSending, setIsSending] = useState(false)
@@ -47,7 +64,7 @@ export default function ResultModal({
         }),
       })
 
-      let responseData = {}
+      let responseData: Record<string, unknown> = {}
       try {
         responseData = await res.json()
       } catch {
@@ -55,7 +72,7 @@ export default function ResultModal({
       }
 
       if (!res.ok) {
-        showToast(responseData.error || 'Error sending feedback', 'error')
+        showToast((responseData.error as string) || 'Error sending feedback', 'error')
         return
       }
 
@@ -173,8 +190,8 @@ export default function ResultModal({
                           </span>
                         </div>
                         <div className="text-sm text-slate-800">
-                          {typeof dayPlan === 'object' && dayPlan.task
-                            ? dayPlan.task
+                          {typeof dayPlan === 'object' && dayPlan !== null && 'task' in dayPlan
+                            ? (dayPlan as { task: string }).task
                             : dayPlan}
                         </div>
                       </div>
@@ -193,7 +210,7 @@ export default function ResultModal({
                     <button
                       className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-1.5 rounded-lg font-bold transition"
                       onClick={() => {
-                        navigator.clipboard.writeText(result.hashtags)
+                        navigator.clipboard.writeText(result.hashtags ?? '')
                         showToast('Hashtags Copied!', 'success')
                       }}
                     >
@@ -240,10 +257,10 @@ export default function ResultModal({
 
                     <textarea
                       className="w-full bg-slate-50 border-slate-200 border rounded-lg px-4 py-3 text-sm outline-none transition border-slate-300 focus:ring-2 focus:ring-emerald-500 resize-none"
-                      rows="2"
+                      rows={2}
                       placeholder="Optional: Tell us what you think..."
                       value={feedbackText}
-                      onChange={(e) => setFeedbackText(e.target.value)}
+                      onChange={(e: ChangeEvent<HTMLTextAreaElement>) => setFeedbackText(e.target.value)}
                     />
 
                     <button
@@ -266,7 +283,7 @@ export default function ResultModal({
               <div className="flex gap-2">
                 <button
                   onClick={() => {
-                    const allText = `Strategy:\n${result.strategy}\n\nPro Tip:\n${result.proTip}\n\nBest Time to Post:\n${result.bestPostTime}\n\nSchedule:\n${result.schedule.join('\n')}\n\nHashtags:\n${result.hashtags}`
+                    const allText = `Strategy:\n${result.strategy}\n\nPro Tip:\n${result.proTip ?? ''}\n\nBest Time to Post:\n${result.bestPostTime ?? ''}\n\nSchedule:\n${result.schedule.join('\n')}\n\nHashtags:\n${result.hashtags ?? ''}`
                     navigator.clipboard.writeText(allText)
                     showToast('Full Plan Copied!', 'success')
                   }}

@@ -1,23 +1,34 @@
 // Simple In-Memory Rate Limiter for Next.js (User ID based)
 const limit = 5 // Max 5 requests
-const window = 60 * 1000 // 60 seconds window
+const windowMs = 60 * 1000 // 60 seconds window
 
-const requestStore = new Map() // Key: userId, Value: { count: number, resetTime: number }
+interface RateLimitRecord {
+  count: number
+  resetTime: number
+}
 
-export function checkRateLimit(userId) {
+interface RateLimitResult {
+  success: boolean
+  retryAfter?: number
+}
+
+// Key: userId, Value: { count: number, resetTime: number }
+const requestStore = new Map<string, RateLimitRecord>()
+
+export function checkRateLimit(userId: string): RateLimitResult {
   const now = Date.now()
   const record = requestStore.get(userId)
 
   // 1. No record yet (First request)
   if (!record) {
-    requestStore.set(userId, { count: 1, resetTime: now + window })
+    requestStore.set(userId, { count: 1, resetTime: now + windowMs })
     return { success: true }
   }
 
   // 2. Window expired? (1 minute over)
   if (now > record.resetTime) {
     // Reset count
-    requestStore.set(userId, { count: 1, resetTime: now + window })
+    requestStore.set(userId, { count: 1, resetTime: now + windowMs })
     return { success: true }
   }
 
