@@ -31,20 +31,21 @@ function createSupabaseFromBearerToken(token: string) {
   )
 }
 
-function createSupabaseFromCookies(cookieStore: ReturnType<typeof cookies>) {
+async function createSupabaseFromCookies() {
+  const cookieStore = await cookies()
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
     {
       cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
+        async get(name: string) {
+          return (await cookieStore).get(name)?.value
         },
-        set(name: string, value: string, options: Record<string, unknown>) {
-          cookieStore.set({ name, value, ...options })
+        async set(name: string, value: string, options: Record<string, unknown>) {
+          ;(await cookieStore).set({ name, value, ...options })
         },
-        remove(name: string, options: Record<string, unknown>) {
-          cookieStore.set({ name, value: '', ...options })
+        async remove(name: string, options: Record<string, unknown>) {
+          ;(await cookieStore).set({ name, value: '', ...options })
         },
       },
     }
@@ -95,11 +96,10 @@ export async function POST(req: Request) {
     }
 
     const bearerToken = getBearerToken(req)
-    const cookieStore = cookies()
 
     const supabase = bearerToken
       ? createSupabaseFromBearerToken(bearerToken)
-      : createSupabaseFromCookies(cookieStore)
+      : await createSupabaseFromCookies()
 
     const {
       data: { user },
