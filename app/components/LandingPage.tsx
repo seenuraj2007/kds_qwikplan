@@ -99,34 +99,23 @@ export default function LandingPage() {
             </Link>
           </div>
 
-          {/* Dashboard Preview Card */}
-          <div className="relative max-w-5xl mx-auto group animate-slide-in-up" style={{animationDelay: '300ms'}}>
-            <div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-            <div className="relative bg-slate-900 rounded-xl ring-1 ring-white/10 shadow-2xl overflow-hidden aspect-[16/9] md:aspect-[21/9] flex items-center justify-center border border-slate-800 transform transition-transform duration-300 group-hover:scale-[1.02]">
-               {/* Mock UI Content */}
-               <div className="text-slate-500 font-mono text-sm">
-                  <div className="flex gap-2 mb-4">
-                    <div className="h-3 w-3 rounded-full bg-red-500/20 group-hover:bg-red-500/40 transition-colors"></div>
-                    <div className="h-3 w-3 rounded-full bg-yellow-500/20 group-hover:bg-yellow-500/40 transition-colors"></div>
-                    <div className="h-3 w-3 rounded-full bg-green-500/20 group-hover:bg-green-500/40 transition-colors"></div>
-                  </div>
-                  <div className="grid grid-cols-12 gap-4 p-6 opacity-50">
-                     <div className="col-span-3 h-32 bg-slate-800 rounded animate-pulse"></div>
-                     <div className="col-span-9 space-y-4">
-                        <div className="h-8 bg-slate-800 rounded animate-pulse"></div>
-                        <div className="h-8 bg-slate-800 rounded animate-pulse w-3/4"></div>
-                        <div className="grid grid-cols-3 gap-2 mt-4">
-                           <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
-                           <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
-                           <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
-                        </div>
-                     </div>
-                  </div>
-               </div>
-            </div>
-          </div>
-        </div>
-      </main>
+{/* Dashboard Preview Card - Responsive to Image Size */}
+<div className="relative max-w-5xl mx-auto group animate-slide-in-up" style={{animationDelay: '300ms'}}>
+<div className="absolute -inset-1 bg-gradient-to-r from-emerald-600 to-teal-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+<div className="relative bg-slate-900 rounded-xl ring-1 ring-white/10 shadow-2xl overflow-hidden flex items-center justify-center border border-slate-800 transform transition-transform duration-300 group-hover:scale-[1.02]">
+{/*
+NOTE: Replace the 'src' below with your actual screenshot path.
+E.g., if your file is in the 'public' folder: src="/screenshot.png"
+*/}
+<img
+src="/Screenshot 2025-12-31 at 11.36.41 PM"
+alt="AI Marketing Generator Dashboard Interface"
+className="w-full h-auto block"
+/>
+</div>
+</div>
+</div>
+</main>
 
       {/* --- Bento Grid Features --- */}
       <section id="features" className="py-16 max-w-7xl mx-auto px-6">
@@ -205,29 +194,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* --- Stats Section --- */}
-      <section className="py-16 bg-gradient-to-br from-emerald-50 to-teal-50">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div className="text-center animate-slide-in-up">
-              <div className="text-4xl font-extrabold text-emerald-600 mb-2">10K+</div>
-              <div className="text-slate-600 font-medium">Users</div>
-            </div>
-            <div className="text-center animate-slide-in-up" style={{animationDelay: '100ms'}}>
-              <div className="text-4xl font-extrabold text-emerald-600 mb-2">50K+</div>
-              <div className="text-slate-600 font-medium">Plans Generated</div>
-            </div>
-            <div className="text-center animate-slide-in-up" style={{animationDelay: '200ms'}}>
-              <div className="text-4xl font-extrabold text-emerald-600 mb-2">100%</div>
-              <div className="text-slate-600 font-medium">Open Source</div>
-            </div>
-            <div className="text-center animate-slide-in-up" style={{animationDelay: '300ms'}}>
-              <div className="text-4xl font-extrabold text-emerald-600 mb-2">5s</div>
-              <div className="text-slate-600 font-medium">Avg Generation</div>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
       {/* --- CTA Section --- */}
       <section className="py-20 bg-slate-900 relative overflow-hidden">
@@ -239,7 +206,7 @@ export default function LandingPage() {
             Ready to Grow Your Business?
           </h2>
           <p className="text-lg text-slate-400 mb-8 animate-slide-in-up" style={{animationDelay: '100ms'}}>
-            Join thousands of businesses already using KDS QwikPlan to create powerful marketing strategies in seconds.
+DKS QwikPlan to create powerful marketing strategies in seconds.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-in-up" style={{animationDelay: '200ms'}}>
             <Link
@@ -256,7 +223,7 @@ export default function LandingPage() {
       <footer className="bg-white border-t border-slate-200 py-12">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-slate-900">KDS QwikPlan</span>
+            <span className="font-bold text-slate-900">DKS QwikPlan</span>
           </div>
 
           <div className="flex gap-6 text-sm font-medium text-slate-600">
@@ -271,7 +238,7 @@ export default function LandingPage() {
           </div>
 
           <div className="text-sm text-slate-400">
-            &copy; {new Date().getFullYear()} KDS QwikPlan.
+            &copy; {new Date().getFullYear()} DKS QwikPlan.
           </div>
         </div>
       </footer>
