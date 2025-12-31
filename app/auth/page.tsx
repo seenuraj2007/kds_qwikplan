@@ -163,25 +163,29 @@ async function handleGoogleLogin() {
   return (
     <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
       <div className="max-w-5xl w-full bg-white rounded-2xl shadow-2xl overflow-hidden flex flex-col md:flex-row border border-slate-200">
-        
+
         {/* --- LEFT SIDE: Visuals --- */}
-        <div className="md:w-1/2 bg-slate-900 p-8 sm:p-12 flex flex-col justify-between">
-          <div>
-            <div className="w-8 h-10 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
-              <Zap className="w-4 h-6 fill-current" />
+        <div className="md:w-1/2 bg-slate-900 p-8 sm:p-12 flex flex-col justify-between relative overflow-hidden">
+          {/* Background decoration */}
+          <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-500/10 rounded-full blur-3xl"></div>
+
+          <div className="relative z-10">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg">
+              <Zap className="w-5 h-5 fill-current" />
             </div>
-            <h1 className="text-3xl font-bold text-white mb-2 mt-2">
+            <h1 className="text-3xl font-bold text-white mb-2 mt-4">
               {isLogin ? 'Welcome Back!' : 'Start Planning Today'}
             </h1>
-            <p className="text-slate-400 text-base">
-              {isLogin 
-                ? 'Log in to access your marketing dashboard.' 
+            <p className="text-slate-400 text-base leading-relaxed">
+              {isLogin
+                ? 'Log in to access your marketing dashboard.'
                 : 'Join thousands of small businesses growing with AI.'}
             </p>
           </div>
-          
-          <div className="hidden md:block">
-            <div className="flex gap-4 text-slate-500 text-sm">
+
+          <div className="hidden md:block relative z-10">
+            <div className="flex gap-6 text-slate-500 text-sm">
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path></svg>
                 <span>Secure Login</span>
@@ -190,26 +194,30 @@ async function handleGoogleLogin() {
                 <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4 6-6"></path></svg>
                 <span>AI Powered</span>
               </div>
+              <div className="flex items-center gap-2">
+                <svg className="w-5 h-5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                <span>Instant Setup</span>
+              </div>
             </div>
           </div>
         </div>
 
         {/* --- RIGHT SIDE: Form --- */}
         <div className="md:w-1/2 p-8 sm:p-12 flex flex-col justify-center">
-          
+
           {/* Tabs */}
           <div className="flex border-b border-slate-200 mb-8">
             <button
               type="button"
               onClick={() => setIsLogin(true)}
-              className={`pb-4 border-b-2 text-sm font-semibold transition-colors duration-200 ${isLogin ? 'border-emerald-600 text-emerald-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+              className={`pb-4 border-b-2 text-sm font-semibold transition-all duration-200 ${isLogin ? 'border-emerald-600 text-emerald-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-200'}`}
             >
               Log In
             </button>
             <button
               type="button"
               onClick={() => setIsLogin(false)}
-              className={`pb-4 border-b-2 text-sm font-semibold transition-colors duration-200 ml-8 ${!isLogin ? 'border-emerald-600 text-emerald-600' : 'border-transparent text-slate-500 hover:text-slate-700'}`}
+              className={`pb-4 border-b-2 text-sm font-semibold transition-all duration-200 ml-8 ${!isLogin ? 'border-emerald-600 text-emerald-600' : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-200'}`}
             >
               Sign Up
             </button>
@@ -217,7 +225,7 @@ async function handleGoogleLogin() {
 
           {/* General Error Message */}
           {error && (
-            <div className="mb-6 p-3 bg-red-50 text-red-700 text-sm rounded-lg border border-red-200 flex items-center gap-2">
+            <div className="mb-6 p-4 bg-red-50 text-red-700 text-sm rounded-xl border border-red-200 flex items-center gap-3 animate-shake">
               <svg className="w-5 h-5 text-red-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
               <span>{error}</span>
             </div>

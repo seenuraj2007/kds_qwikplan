@@ -94,7 +94,7 @@ export default function ResultModal({
   return (
     <>
       {showModal && result && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 animate-fade-in">
           {/* Backdrop Blur */}
           <div
             className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm transition-opacity"
@@ -102,9 +102,9 @@ export default function ResultModal({
           ></div>
 
           {/* Modal Content */}
-          <div className="relative bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl z-10 animate-in fade-in zoom-in duration-300">
+          <div className="relative bg-white w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl z-10 animate-scale-in">
             {/* Modal Header */}
-            <div className="bg-slate-900 p-6 rounded-t-3xl flex justify-between items-start">
+            <div className="bg-slate-900 p-6 rounded-t-3xl flex justify-between items-start sticky top-0 z-20">
               <div>
                 <h2 className="text-2xl font-bold text-white">Marketing Blueprint</h2>
                 <p className="text-slate-400 text-sm mt-1">
@@ -115,7 +115,7 @@ export default function ResultModal({
                 {/* Print Button */}
                 <button
                   onClick={() => window.print()}
-                  className="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg transition"
+                  className="text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 px-3 py-2 rounded-lg transition-all duration-200 transform hover:scale-105"
                   title="Save as PDF"
                 >
                   🖨️
@@ -123,9 +123,11 @@ export default function ResultModal({
                 {/* Close Button */}
                 <button
                   onClick={onClose}
-                  className="text-slate-400 hover:text-white transition text-2xl leading-none"
+                  className="text-slate-400 hover:text-white hover:bg-slate-800 w-8 h-8 flex items-center justify-center rounded-lg transition-all duration-200 transform hover:scale-110"
                 >
-                  ×
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
                 </button>
               </div>
             </div>
@@ -133,33 +135,33 @@ export default function ResultModal({
             {/* Modal Body */}
             <div className="p-8 space-y-6">
               {/* Strategy */}
-              <div>
+              <div className="animate-slide-in-up" style={{animationDelay: '100ms'}}>
                 <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
                   Core Strategy
                 </h3>
-                <div className="bg-emerald-50 p-5 border border-emerald-100 rounded-xl text-slate-800 font-medium leading-relaxed">
+                <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 p-5 border border-emerald-200/50 rounded-xl text-slate-800 font-medium leading-relaxed shadow-sm">
                   {result.strategy}
                 </div>
               </div>
 
               {/* Pro Tip */}
               {result.proTip && (
-                <div className="flex gap-4 bg-amber-50 p-5 rounded-xl border border-amber-100">
-                  <span className="text-2xl">💡</span>
+                <div className="flex gap-4 bg-gradient-to-br from-amber-50 to-amber-100/50 p-5 rounded-xl border border-amber-200/50 shadow-sm animate-slide-in-up" style={{animationDelay: '200ms'}}>
+                  <span className="text-2xl flex-shrink-0">💡</span>
                   <div>
                     <h3 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-1">
                       Expert Insight
                     </h3>
-                    <p className="text-slate-800 text-sm">{result.proTip}</p>
+                    <p className="text-slate-800 text-sm leading-relaxed">{result.proTip}</p>
                   </div>
                 </div>
               )}
 
               {/* Best Time to Post */}
               {result.bestPostTime && (
-                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl border border-indigo-100">
+                <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-5 rounded-xl border border-indigo-200/50 shadow-sm animate-slide-in-up" style={{animationDelay: '300ms'}}>
                   <div className="flex items-start gap-3">
-                    <span className="text-2xl">⏰</span>
+                    <span className="text-2xl flex-shrink-0">⏰</span>
                     <div>
                       <h3 className="text-xs font-bold text-indigo-800 uppercase tracking-wider mb-1">
                         Best Time to Post
@@ -173,7 +175,7 @@ export default function ResultModal({
               )}
 
               {/* Schedule */}
-              <div>
+              <div className="animate-slide-in-up" style={{animationDelay: '400ms'}}>
                 <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-3">
                   7-Day Execution Plan
                 </h3>
@@ -182,14 +184,15 @@ export default function ResultModal({
                     result.schedule.map((dayPlan, i) => (
                       <div
                         key={i}
-                        className="bg-white border border-slate-200 p-4 rounded-xl hover:border-emerald-300 transition"
+                        className="bg-white border border-slate-200 p-4 rounded-xl hover:border-emerald-300 hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5"
+                        style={{animationDelay: `${400 + i * 50}ms`}}
                       >
                         <div className="font-bold text-emerald-600 mb-1 flex items-center gap-2">
-                          <span className="bg-emerald-100 px-2 py-0.5 rounded text-xs">
+                          <span className="bg-emerald-100 px-2 py-0.5 rounded text-xs font-semibold">
                             Day {i + 1}
                           </span>
                         </div>
-                        <div className="text-sm text-slate-800">
+                        <div className="text-sm text-slate-800 leading-relaxed">
                           {typeof dayPlan === 'object' && dayPlan !== null && 'task' in dayPlan
                             ? (dayPlan as { task: string }).task
                             : dayPlan}
@@ -201,14 +204,14 @@ export default function ResultModal({
 
               {/* Hashtags */}
               {result.hashtags && (
-                <div>
+                <div className="animate-slide-in-up" style={{animationDelay: '800ms'}}>
                   <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">
                     Targeted Hashtags
                   </h3>
-                  <div className="bg-slate-900 text-slate-50 p-4 rounded-xl font-mono text-sm flex justify-between items-center gap-4">
-                    <span>{result.hashtags}</span>
+                  <div className="bg-slate-900 text-slate-50 p-4 rounded-xl font-mono text-sm flex justify-between items-center gap-4 shadow-md">
+                    <span className="break-all">{result.hashtags}</span>
                     <button
-                      className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-1.5 rounded-lg font-bold transition"
+                      className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs px-4 py-1.5 rounded-lg font-bold transition-all duration-200 transform hover:scale-105 flex-shrink-0"
                       onClick={() => {
                         navigator.clipboard.writeText(result.hashtags ?? '')
                         showToast('Hashtags Copied!', 'success')
@@ -221,13 +224,13 @@ export default function ResultModal({
               )}
 
               {/* Feedback Section */}
-              <div className="border-t border-slate-200 pt-6 mt-4">
+              <div className="border-t border-slate-200 pt-6 mt-4 animate-slide-in-up" style={{animationDelay: '900ms'}}>
                 <h3 className="text-sm font-bold text-slate-800 uppercase tracking-wider mb-3">
                   Rate this Plan
                 </h3>
 
                 {feedbackSent ? (
-                  <div className="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-center text-sm font-semibold">
+                  <div className="bg-emerald-50 text-emerald-700 p-4 rounded-xl text-center text-sm font-semibold border border-emerald-200">
                     ✅ Feedback Received! Thank you.
                   </div>
                 ) : (
@@ -235,20 +238,20 @@ export default function ResultModal({
                     <div className="flex gap-3 mb-3">
                       <button
                         onClick={() => setFeedbackText('Useful')}
-                        className={`flex-1 py-2 rounded-lg border font-semibold text-sm transition ${
+                        className={`flex-1 py-3 rounded-lg border font-semibold text-sm transition-all duration-200 transform hover:scale-105 ${
                           feedbackText === 'Useful'
-                            ? 'border-emerald-600 bg-emerald-50 text-emerald-700'
-                            : 'border-slate-200 hover:border-emerald-400'
+                            ? 'border-emerald-600 bg-emerald-50 text-emerald-700 shadow-md'
+                            : 'border-slate-200 hover:border-emerald-400 hover:bg-emerald-50/50'
                         }`}
                       >
                         👍 Useful
                       </button>
                       <button
                         onClick={() => setFeedbackText('Needs Improvement')}
-                        className={`flex-1 py-2 rounded-lg border font-semibold text-sm transition ${
+                        className={`flex-1 py-3 rounded-lg border font-semibold text-sm transition-all duration-200 transform hover:scale-105 ${
                           feedbackText === 'Needs Improvement'
-                            ? 'border-red-500 bg-red-50 text-red-700'
-                            : 'border-slate-200 hover:border-red-400'
+                            ? 'border-red-500 bg-red-50 text-red-700 shadow-md'
+                            : 'border-slate-200 hover:border-red-400 hover:bg-red-50/50'
                         }`}
                       >
                         👎 Needs Work
@@ -256,7 +259,7 @@ export default function ResultModal({
                     </div>
 
                     <textarea
-                      className="w-full bg-slate-50 border-slate-200 border rounded-lg px-4 py-3 text-sm outline-none transition border-slate-300 focus:ring-2 focus:ring-emerald-500 resize-none"
+                      className="w-full bg-slate-50 border-slate-200 border rounded-xl px-4 py-3 text-sm outline-none transition-all duration-200 border-slate-300 focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 hover:border-slate-400 resize-none"
                       rows={2}
                       placeholder="Optional: Tell us what you think..."
                       value={feedbackText}
@@ -266,9 +269,9 @@ export default function ResultModal({
                     <button
                       onClick={handleFeedbackSubmit}
                       disabled={isSending || feedbackSent}
-                      className={`w-full ${
-                        isSending ? 'bg-slate-600' : 'bg-slate-800'
-                      } text-white font-bold py-2.5 rounded-lg text-sm hover:bg-slate-700 transition disabled:opacity-50 disabled:cursor-not-allowed`}
+                      className={`w-full mt-3 ${
+                        isSending ? 'bg-slate-600' : 'bg-slate-800 hover:bg-slate-700'
+                      } text-white font-bold py-3 rounded-xl text-sm transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none shadow-md`}
                     >
                       {isSending ? 'Sending...' : 'Send Feedback'}
                     </button>
@@ -278,7 +281,7 @@ export default function ResultModal({
             </div>
 
             {/* Modal Footer */}
-            <div className="bg-slate-50 px-8 py-4 rounded-b-3xl flex justify-between items-center border-t border-slate-200">
+            <div className="bg-slate-50 px-8 py-4 rounded-b-3xl flex justify-between items-center border-t border-slate-200 sticky bottom-0 z-20">
               <span className="text-xs text-slate-400">BizPlan AI Generated</span>
               <div className="flex gap-2">
                 <button
@@ -287,13 +290,13 @@ export default function ResultModal({
                     navigator.clipboard.writeText(allText)
                     showToast('Full Plan Copied!', 'success')
                   }}
-                  className="bg-slate-200 text-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-300 transition text-xs"
+                  className="bg-slate-200 text-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-300 transition-all duration-200 transform hover:scale-105 text-xs"
                 >
                   Copy All
                 </button>
                 <button
                   onClick={onClose}
-                  className="bg-slate-200 text-slate-600 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-300 transition text-sm"
+                  className="bg-emerald-600 text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-emerald-700 transition-all duration-200 transform hover:scale-105 text-sm shadow-md hover:shadow-lg"
                 >
                   Close
                 </button>
