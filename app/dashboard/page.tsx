@@ -7,7 +7,6 @@ import { supabase } from '../../lib/supabaseClient'
 // --- IMPORT COMPONENTS ---
 import UsageCard from '../../app/components/UsageCard'
 import ResultModal from '../../app/components/ResultModal'
-import SaveTemplateForm from '../../app/components/SaveTemplateForm'
 import WelcomeAnimation from '../../app/components/WelcomeAnimation'
 
 import Link from 'next/link'
@@ -55,9 +54,6 @@ export default function Dashboard() {
 
   // --- Pop-up Modal State ---
   const [showModal, setShowModal] = useState(false)
-
-  // --- Save Template Modal State ---
-  const [showSaveTemplateModal, setShowSaveTemplateModal] = useState(false)
 
   // --- Toast Notification State ---
   const [toast, setToast] = useState<Toast>({ show: false, msg: '', type: 'success' })
@@ -159,18 +155,7 @@ export default function Dashboard() {
     router.push('/')
   }
 
-  // 4. Open Save Template Modal
-  function handleOpenSaveTemplate() {
-    setShowSaveTemplateModal(true)
-  }
-
-  // 5. Handle Save Template Success
-  function handleSaveTemplateSuccess(templateId: string, templateName: string) {
-    setShowSaveTemplateModal(false)
-    showToast(`Template '${templateName}' saved successfully!`, 'success')
-  }
-
-  // 6. Generate Plan
+  // 4. Generate Plan
   async function handleGenerate() {
     if (!niche.trim()) {
       showToast('Please enter your business niche', 'error')
@@ -457,24 +442,8 @@ export default function Dashboard() {
               platform={platform}
               showToast={showToast}
               onClose={() => setShowModal(false)}
-              onSaveTemplate={handleOpenSaveTemplate}
               userId={userId}
               userEmail={userEmail}
-            />
-          )}
-
-          {/* Save Template Form */}
-          {result && (
-            <SaveTemplateForm
-              showModal={showSaveTemplateModal}
-              result={result}
-              niche={niche}
-              audience={audience}
-              platform={platform}
-              goal={goal}
-              onClose={() => setShowSaveTemplateModal(false)}
-              onSaveSuccess={handleSaveTemplateSuccess}
-              showToast={showToast}
             />
           )}
         </div>
