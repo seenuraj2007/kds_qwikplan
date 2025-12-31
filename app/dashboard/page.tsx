@@ -302,19 +302,28 @@ export default function Dashboard() {
 
       {/* Toast */}
       {toast.show && (
-        <div className={`fixed top-5 right-5 z-[60] px-6 py-3 rounded-lg shadow-xl font-medium text-white transition-all transform ${toast.type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`}>
-          {toast.msg}
+        <div className={`fixed top-5 right-5 z-[60] px-6 py-4 rounded-xl shadow-2xl font-medium text-white transition-all duration-300 transform animate-scale-in flex items-center gap-3 min-w-[300px] ${toast.type === 'success' ? 'bg-emerald-600' : 'bg-red-500'}`}>
+          {toast.type === 'success' ? (
+            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+          ) : (
+            <svg className="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+            </svg>
+          )}
+          <span>{toast.msg}</span>
         </div>
       )}
 
       {/* Navbar */}
-      <nav className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center">
+      <nav className="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-40 bg-white/95 backdrop-blur-md">
           {/* Logo */}
           <Link href="/auth" className="flex items-center gap-2 font-bold text-xl tracking-tight group">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg group-hover:scale-105 group-hover:shadow-xl transition-all duration-300">
               <Zap className="w-4 h-4 fill-current" />
             </div>
-            <span className="text-slate-900">DKS QwikPlan</span>
+            <span className="text-slate-900 group-hover:text-emerald-600 transition-colors">DKS QwikPlan</span>
           </Link>
         <div className="flex items-center gap-4">
           <div className="hidden md:block text-xs font-medium text-slate-400 uppercase tracking-wider">
@@ -322,7 +331,7 @@ export default function Dashboard() {
           </div>
           <button
             onClick={handleLogout}
-            className="text-sm font-semibold text-red-500 hover:text-red-700 hover:bg-red-50 px-4 py-2 rounded transition"
+            className="text-sm font-semibold text-red-500 hover:text-red-700 hover:bg-red-50 px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-sm"
           >
             Logout
           </button>
@@ -343,37 +352,37 @@ export default function Dashboard() {
         <div className="lg:col-span-3 space-y-8">
 
           {/* Tool Card */}
-          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-300">
             <div className="bg-slate-900 p-8 border-b border-slate-100">
               <h1 className="text-2xl font-bold text-white mb-1">AI Marketing Generator</h1>
               <p className="text-slate-400 text-sm mt-1">Create professional strategies in seconds.</p>
             </div>
 
             <div className="p-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Niche</label>
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Niche</label>
                 <input
-                  className="w-full bg-slate-50 border-slate-200 border rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                  className="w-full bg-slate-50 border-slate-200 border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-200 hover:border-slate-300"
                   placeholder="e.g. Boutique Coffee Shop"
                   value={niche}
                   onChange={e => setNiche(e.target.value)}
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Target</label>
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Target</label>
                 <input
-                  className="w-full bg-slate-50 border-slate-200 border rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                  className="w-full bg-slate-50 border-slate-200 border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-200 hover:border-slate-300"
                   placeholder="e.g. IT Professionals"
                   value={audience}
                   onChange={e => setAudience(e.target.value)}
                 />
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Platform</label>
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Platform</label>
                 <select
-                  className="w-full bg-slate-50 border-slate-200 border rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                  className="w-full bg-slate-50 border-slate-200 border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-200 hover:border-slate-300 appearance-none cursor-pointer"
                   value={platform} onChange={e => setPlatform(e.target.value)}
                 >
                   <option value="instagram">Instagram</option>
@@ -383,10 +392,10 @@ export default function Dashboard() {
                 </select>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-slate-500 uppercase mb-2">Goal</label>
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Goal</label>
                 <select
-                  className="w-full bg-slate-50 border-slate-200 border rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 outline-none transition"
+                  className="w-full bg-slate-50 border-slate-200 border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all duration-200 hover:border-slate-300 appearance-none cursor-pointer"
                   value={goal} onChange={e => setGoal(e.target.value)}
                 >
                   <option value="sales">Drive Sales</option>
@@ -395,13 +404,30 @@ export default function Dashboard() {
                 </select>
               </div>
 
-              <div className="md:col-span-2 mt-2">
+              <div className="md:col-span-2 mt-4">
                 <button
                   onClick={handleGenerate}
                   disabled={loading}
-                  className={`w-full rounded-xl text-white font-bold py-4 shadow-lg transform transition hover:-translate-y-1 text-sm uppercase tracking-wide ${loading ? 'bg-slate-400 cursor-not-allowed' : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700'}`}
+                  className={`w-full rounded-xl text-white font-bold py-4 text-sm uppercase tracking-wide transition-all duration-300 transform ${
+                    loading
+                      ? 'bg-slate-400 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0'
+                  }`}
                 >
-                  {loading ? 'Generating...' : 'Generate Strategy'}
+                  {loading ? (
+                    <span className="flex items-center justify-center gap-2">
+                      <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Generating...
+                    </span>
+                  ) : (
+                    <span className="flex items-center justify-center gap-2">
+                      Generate Strategy
+                      <Zap className="w-4 h-4" />
+                    </span>
+                  )}
                 </button>
               </div>
             </div>
