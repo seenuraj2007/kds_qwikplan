@@ -16,6 +16,7 @@ interface ResultModalProps {
   platform: string
   showToast: (message: string, type: 'success' | 'error') => void
   onClose: () => void
+  onSaveTemplate: () => void
   userId: string
   userEmail: string
 }
@@ -27,6 +28,7 @@ export default function ResultModal({
   platform,
   showToast,
   onClose,
+  onSaveTemplate,
 }: ResultModalProps) {
   const [feedbackText, setFeedbackText] = useState('')
   const [feedbackSent, setFeedbackSent] = useState(false)
@@ -293,6 +295,12 @@ export default function ResultModal({
                   className="bg-slate-200 text-slate-700 px-6 py-2.5 rounded-lg font-semibold hover:bg-slate-300 transition-all duration-200 transform hover:scale-105 text-xs"
                 >
                   Copy All
+                </button>
+                <button
+                  onClick={onSaveTemplate}
+                  className="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white px-6 py-2.5 rounded-lg font-semibold transition-all duration-200 transform hover:scale-105 text-sm shadow-md hover:shadow-lg"
+                >
+                  Save as Template
                 </button>
                 <button
                   onClick={onClose}
