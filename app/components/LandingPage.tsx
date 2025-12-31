@@ -35,8 +35,10 @@ export default function LandingPage() {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            {/* <Link href="#features" className="hover:text-emerald-600 transition-colors">Features</Link>
-            <Link href="#pricing" className="hover:text-emerald-600 transition-colors">Pricing</Link> */}
+            <Link href="#features" className="hover:text-slate-900 hover:text-emerald-600 transition-colors relative group">
+              Features
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
             <Link href="https://github.com/seenuraj2007/kds_qwikplan" target="_blank" className="hover:text-slate-900 hover:text-emerald-600 transition-colors flex items-center gap-1.5 group">
               <Github className="w-4 h-4 group-hover:scale-110 transition-transform" /> GitHub
             </Link>
@@ -44,9 +46,6 @@ export default function LandingPage() {
 
           {/* CTA */}
           <div className="flex items-center gap-3">
-            {/* <Link href="/auth" className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition-all shadow-sm">
-              Log In
-            </Link> */}
             <Link
               href="/auth"
               className="inline-flex items-center justify-center px-5 py-2 text-sm font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 active:translate-y-0"
@@ -129,91 +128,6 @@ export default function LandingPage() {
         </div>
       </main>
 
-      {/* --- Social Proof --- */}
-
-
-      {/* --- Testimonials Section --- */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Trusted by Creators</h2>
-            <p className="text-lg text-slate-600">See what our community is saying</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Testimonial 1 */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-lg hover:border-emerald-200 transition-all duration-300 transform hover:-translate-y-1">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-slate-700 mb-4 leading-relaxed">
-                &ldquo;This tool saved me hours of planning. The strategies are actually usable and hashtag suggestions are spot on.&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold">
-                  S
-                </div>
-                <div>
-                  <div className="font-semibold text-slate-900 text-sm">Sarah M.</div>
-                  <div className="text-slate-500 text-xs">Content Creator</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 2 */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-lg hover:border-emerald-200 transition-all duration-300 transform hover:-translate-y-1">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-slate-700 mb-4 leading-relaxed">
-                &ldquo;Finally, an AI tool that doesn&apos;t require a degree to use. Generated my first marketing plan in under a minute.&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">
-                  J
-                </div>
-                <div>
-                  <div className="font-semibold text-slate-900 text-sm">James K.</div>
-                  <div className="text-slate-500 text-xs">Small Business Owner</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Testimonial 3 */}
-            <div className="bg-slate-50 p-6 rounded-2xl border border-slate-100 hover:shadow-lg hover:border-emerald-200 transition-all duration-300 transform hover:-translate-y-1">
-              <div className="flex items-center gap-1 mb-4">
-                {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 20 20">
-                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                  </svg>
-                ))}
-              </div>
-              <p className="text-slate-700 mb-4 leading-relaxed">
-                &ldquo;The open source aspect is huge. I&apos;ve deployed this on my own servers and customized it for my agency.&rdquo;
-              </p>
-              <div className="flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center text-white font-bold">
-                  A
-                </div>
-                <div>
-                  <div className="font-semibold text-slate-900 text-sm">Alex R.</div>
-                  <div className="text-slate-500 text-xs">Digital Agency Owner</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-
       {/* --- Bento Grid Features --- */}
       <section id="features" className="py-16 max-w-7xl mx-auto px-6">
         <div className="text-center mb-16">
@@ -291,6 +205,53 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* --- Stats Section --- */}
+      <section className="py-16 bg-gradient-to-br from-emerald-50 to-teal-50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div className="text-center animate-slide-in-up">
+              <div className="text-4xl font-extrabold text-emerald-600 mb-2">10K+</div>
+              <div className="text-slate-600 font-medium">Users</div>
+            </div>
+            <div className="text-center animate-slide-in-up" style={{animationDelay: '100ms'}}>
+              <div className="text-4xl font-extrabold text-emerald-600 mb-2">50K+</div>
+              <div className="text-slate-600 font-medium">Plans Generated</div>
+            </div>
+            <div className="text-center animate-slide-in-up" style={{animationDelay: '200ms'}}>
+              <div className="text-4xl font-extrabold text-emerald-600 mb-2">100%</div>
+              <div className="text-slate-600 font-medium">Open Source</div>
+            </div>
+            <div className="text-center animate-slide-in-up" style={{animationDelay: '300ms'}}>
+              <div className="text-4xl font-extrabold text-emerald-600 mb-2">5s</div>
+              <div className="text-slate-600 font-medium">Avg Generation</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* --- CTA Section --- */}
+      <section className="py-20 bg-slate-900 relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl"></div>
+        </div>
+        <div className="relative max-w-3xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6 animate-slide-in-up">
+            Ready to Grow Your Business?
+          </h2>
+          <p className="text-lg text-slate-400 mb-8 animate-slide-in-up" style={{animationDelay: '100ms'}}>
+            Join thousands of businesses already using KDS QwikPlan to create powerful marketing strategies in seconds.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-in-up" style={{animationDelay: '200ms'}}>
+            <Link
+              href="/auth"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-12 px-8 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-500/30 transition-all transform hover:scale-105 hover:shadow-xl"
+            >
+              Get Started Free <Rocket className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* --- Footer --- */}
       <footer className="bg-white border-t border-slate-200 py-12">
         <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
@@ -299,9 +260,14 @@ export default function LandingPage() {
           </div>
 
           <div className="flex gap-6 text-sm font-medium text-slate-600">
-            <Link href="/auth" className="hover:text-emerald-600 transition">Product</Link>
-            {/* <Link href="#" className="hover:text-emerald-600 transition">Documentation</Link> */}
-            <Link href="https://github.com/seenuraj2007/kds_qwikplan" target="_blank" className="hover:text-emerald-600 transition">GitHub</Link>
+            <Link href="/auth" className="hover:text-emerald-600 transition relative group">
+              Product
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
+            <Link href="https://github.com/seenuraj2007/kds_qwikplan" target="_blank" className="hover:text-emerald-600 transition relative group">
+              GitHub
+              <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-emerald-600 transition-all duration-300 group-hover:w-full"></span>
+            </Link>
           </div>
 
           <div className="text-sm text-slate-400">
