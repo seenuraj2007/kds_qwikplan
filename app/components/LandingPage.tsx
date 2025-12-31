@@ -1,11 +1,11 @@
-// app/components/LandingPage.jsx
+// app/components/LandingPage.tsx
 import Link from 'next/link'
-import { 
-  ArrowRight, 
-  Zap, 
-  Shield, 
-  BarChart, 
-  Rocket, 
+import {
+  ArrowRight,
+  Zap,
+  Shield,
+  BarChart,
+  Rocket,
   Github,
   CheckCircle2,
   Code,
@@ -15,7 +15,7 @@ import {
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-slate-50 text-slate-950 font-sans overflow-hidden selection:bg-emerald-200 selection:text-emerald-900">
-      
+
       {/* --- Background Pattern --- */}
       <div className="fixed inset-0 z-0 pointer-events-none opacity-40">
         <div className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_70%,transparent_100%)]"></div>
@@ -24,7 +24,7 @@ export default function LandingPage() {
       {/* --- Navbar --- */}
       <nav className="sticky top-0 z-50 w-full border-b border-slate-200/60 bg-white/70 backdrop-blur-md">
         <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-          
+
           {/* Logo */}
           <Link href="/auth" className="flex items-center gap-2 font-bold text-xl tracking-tight group">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform">
@@ -47,8 +47,8 @@ export default function LandingPage() {
             {/* <Link href="/auth" className="hidden sm:inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 hover:text-emerald-600 transition-all shadow-sm">
               Log In
             </Link> */}
-            <Link 
-              href="/auth" 
+            <Link
+              href="/auth"
               className="inline-flex items-center justify-center px-4 py-2 text-sm font-semibold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               Get Started
@@ -60,7 +60,7 @@ export default function LandingPage() {
       {/* --- Hero Section --- */}
       <main className="relative pt-24 pb-16 sm:pt-32 sm:pb-24 z-10">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          
+
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-emerald-700 text-xs font-bold uppercase tracking-wider mb-8 animate-fade-in-up">
             <span className="relative flex h-2 w-2">
@@ -83,15 +83,15 @@ export default function LandingPage() {
 
           {/* Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-20">
-            <Link 
-              href="/auth" 
+            <Link
+              href="/auth"
               className="w-full sm:w-auto flex items-center justify-center gap-2 h-12 px-8 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 shadow-lg shadow-emerald-500/25 transition-all transform hover:scale-105"
             >
               Start Generating Free <ArrowRight className="w-4 h-4" />
             </Link>
 
-            <Link 
-              href="https://github.com/seenuraj2007/kds_qwikplan" 
+            <Link
+              href="https://github.com/seenuraj2007/kds_qwikplan"
               target="_blank"
               className="w-full sm:w-auto flex items-center justify-center gap-2 h-12 px-8 rounded-xl font-bold text-slate-700 bg-white border border-slate-200 hover:bg-slate-50 hover:border-slate-300 hover:text-slate-900 transition-all shadow-sm"
             >
@@ -106,23 +106,23 @@ export default function LandingPage() {
             <div className="relative bg-slate-900 rounded-xl ring-1 ring-white/10 shadow-2xl overflow-hidden aspect-[16/9] md:aspect-[21/9] flex items-center justify-center border border-slate-800">
                {/* Mock UI Content */}
                <div className="text-slate-500 font-mono text-sm">
-                 <div className="flex gap-2 mb-4">
-                   <div className="h-3 w-3 rounded-full bg-red-500/20"></div>
-                   <div className="h-3 w-3 rounded-full bg-yellow-500/20"></div>
-                   <div className="h-3 w-3 rounded-full bg-green-500/20"></div>
-                 </div>
-                 <div className="grid grid-cols-12 gap-4 p-6 opacity-50">
-                    <div className="col-span-3 h-32 bg-slate-800 rounded animate-pulse"></div>
-                    <div className="col-span-9 space-y-4">
-                       <div className="h-8 bg-slate-800 rounded animate-pulse"></div>
-                       <div className="h-8 bg-slate-800 rounded animate-pulse w-3/4"></div>
-                       <div className="grid grid-cols-3 gap-2 mt-4">
-                          <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
-                          <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
-                          <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
-                       </div>
-                    </div>
-                 </div>
+                  <div className="flex gap-2 mb-4">
+                    <div className="h-3 w-3 rounded-full bg-red-500/20"></div>
+                    <div className="h-3 w-3 rounded-full bg-yellow-500/20"></div>
+                    <div className="h-3 w-3 rounded-full bg-green-500/20"></div>
+                  </div>
+                  <div className="grid grid-cols-12 gap-4 p-6 opacity-50">
+                     <div className="col-span-3 h-32 bg-slate-800 rounded animate-pulse"></div>
+                     <div className="col-span-9 space-y-4">
+                        <div className="h-8 bg-slate-800 rounded animate-pulse"></div>
+                        <div className="h-8 bg-slate-800 rounded animate-pulse w-3/4"></div>
+                        <div className="grid grid-cols-3 gap-2 mt-4">
+                           <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
+                           <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
+                           <div className="h-20 bg-slate-800 rounded animate-pulse"></div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function LandingPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
+
           {/* Feature 1 (Large) */}
           <div className="md:col-span-2 p-8 rounded-3xl bg-white border border-slate-200 shadow-sm hover:shadow-lg hover:border-emerald-200 transition-all group overflow-hidden relative">
             <div className="absolute top-0 right-0 p-8 opacity-10 group-hover:opacity-20 transition-opacity">
@@ -186,8 +186,8 @@ export default function LandingPage() {
                 <p className="text-slate-300 mb-6">
                   We believe in transparency. View our codebase, contribute, or host it on your own server. Fully customizable.
                 </p>
-                <Link 
-                  href="https://github.com/seenuraj2007/kds_qwikplan" 
+                <Link
+                  href="https://github.com/seenuraj2007/kds_qwikplan"
                   target="_blank"
                   className="inline-flex items-center gap-2 px-6 py-3 bg-white text-slate-900 rounded-lg font-bold hover:bg-slate-100 transition-colors"
                 >
@@ -215,13 +215,13 @@ export default function LandingPage() {
           <div className="flex items-center gap-2">
             <span className="font-bold text-slate-900">KDS QwikPlan</span>
           </div>
-          
+
           <div className="flex gap-6 text-sm font-medium text-slate-600">
             <Link href="/auth" className="hover:text-emerald-600 transition">Product</Link>
             {/* <Link href="#" className="hover:text-emerald-600 transition">Documentation</Link> */}
             <Link href="https://github.com/seenuraj2007/kds_qwikplan" target="_blank" className="hover:text-emerald-600 transition">GitHub</Link>
           </div>
-          
+
           <div className="text-sm text-slate-400">
             &copy; {new Date().getFullYear()} KDS QwikPlan.
           </div>

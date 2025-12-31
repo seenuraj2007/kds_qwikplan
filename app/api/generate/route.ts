@@ -5,18 +5,25 @@ import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 import { checkRateLimit } from '../../../lib/rate-limit'
 
-function getBearerToken(req) {
+interface GenerateRequestBody {
+  niche?: unknown
+  audience?: unknown
+  platform?: unknown
+  goal?: unknown
+}
+
+function getBearerToken(req: Request): string | null {
   const authHeader = req.headers.get('authorization')
   if (!authHeader) return null
 
   const match = authHeader.match(/^Bearer\s+(.+)$/i)
-  return match?.[1] || null
+  return match?.[1] ?? null
 }
 
-function createSupabaseFromBearerToken(token) {
+function createSupabaseFromBearerToken(token: string) {
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
     {
       global: {
         headers: {
@@ -32,31 +39,32 @@ function createSupabaseFromBearerToken(token) {
   )
 }
 
-function createSupabaseFromCookies(cookieStore) {
+async function createSupabaseFromCookies() {
+  const cookieStore = await cookies()
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
     {
       cookies: {
-        get(name) {
-          return cookieStore.get(name)?.value
+        async get(name: string) {
+          return (await cookieStore).get(name)?.value
         },
-        set(name, value, options) {
-          cookieStore.set({ name, value, ...options })
+        async set(name: string, value: string, options: Record<string, unknown>) {
+          ;(await cookieStore).set({ name, value, ...options })
         },
-        remove(name, options) {
-          cookieStore.set({ name, value: '', ...options })
+        async remove(name: string, options: Record<string, unknown>) {
+          ;(await cookieStore).set({ name, value: '', ...options })
         },
       },
     }
   )
 }
 
-export async function POST(req) {
+export async function POST(req: Request) {
   try {
-    let body
+    let body: GenerateRequestBody | undefined
     try {
-      body = await req.json()
+      body = await req.json() as GenerateRequestBody
     } catch {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
@@ -71,11 +79,10 @@ export async function POST(req) {
     }
 
     const bearerToken = getBearerToken(req)
-    const cookieStore = cookies()
 
     const supabase = bearerToken
       ? createSupabaseFromBearerToken(bearerToken)
-      : createSupabaseFromCookies(cookieStore)
+      : await createSupabaseFromCookies()
 
     const {
       data: { user },
@@ -90,7 +97,7 @@ export async function POST(req) {
     if (!rateLimitResult.success) {
       const retryAfterSeconds = Math.max(
         1,
-        Math.ceil((rateLimitResult.retryAfter - Date.now()) / 1000)
+        Math.ceil(((rateLimitResult.retryAfter ?? 0) - Date.now()) / 1000)
       )
 
       return NextResponse.json(
@@ -106,7 +113,7 @@ export async function POST(req) {
 
     let currentUsage = 0
     let limit = 10
-    let profileId = null
+    let profileId: string | null = null
 
     const { data: profiles, error: fetchError } = await supabase
       .from('profiles')
@@ -150,9 +157,9 @@ export async function POST(req) {
         )
       }
 
-      profileId = newProfile?.id
-      currentUsage = newProfile?.plan_usage || 0
-      limit = newProfile?.monthly_limit || 10
+      profileId = newProfile?.id ?? null
+      currentUsage = newProfile?.plan_usage ?? 0
+      limit = newProfile?.monthly_limit ?? 10
     }
 
     if (currentUsage >= limit) {
@@ -224,7 +231,7 @@ export async function POST(req) {
 
     const content = chatCompletion.choices[0]?.message?.content || '{}'
 
-    let parsed
+    let parsed: Record<string, unknown>
     try {
       parsed = JSON.parse(content)
 
@@ -232,10 +239,10 @@ export async function POST(req) {
         parsed.schedule = []
       }
 
-      parsed.schedule = parsed.schedule.map((item) => {
+      parsed.schedule = (parsed.schedule as string[]).map((item) => {
         if (typeof item === 'object' && item !== null) {
-          if (item.day && item.task) {
-            return `${item.day}: ${item.task}`
+          if ('day' in item && 'task' in item) {
+            return `${(item as { day: string }).day}: ${(item as { task: string }).task}`
           }
           return JSON.stringify(item)
         }

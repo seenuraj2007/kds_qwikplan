@@ -4,18 +4,18 @@ import { createClient } from '@supabase/supabase-js'
 import { createServerClient } from '@supabase/ssr'
 import { cookies } from 'next/headers'
 
-function getBearerToken(req) {
+function getBearerToken(req: Request): string | null {
   const authHeader = req.headers.get('authorization')
   if (!authHeader) return null
 
   const match = authHeader.match(/^Bearer\s+(.+)$/i)
-  return match?.[1] || null
+  return match?.[1] ?? null
 }
 
-function createSupabaseFromBearerToken(token) {
+function createSupabaseFromBearerToken(token: string) {
   return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
     {
       global: {
         headers: {
@@ -31,27 +31,28 @@ function createSupabaseFromBearerToken(token) {
   )
 }
 
-function createSupabaseFromCookies(cookieStore) {
+async function createSupabaseFromCookies() {
+  const cookieStore = await cookies()
   return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+    process.env.NEXT_PUBLIC_SUPABASE_URL ?? '',
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
     {
       cookies: {
-        get(name) {
-          return cookieStore.get(name)?.value
+        async get(name: string) {
+          return (await cookieStore).get(name)?.value
         },
-        set(name, value, options) {
-          cookieStore.set({ name, value, ...options })
+        async set(name: string, value: string, options: Record<string, unknown>) {
+          ;(await cookieStore).set({ name, value, ...options })
         },
-        remove(name, options) {
-          cookieStore.set({ name, value: '', ...options })
+        async remove(name: string, options: Record<string, unknown>) {
+          ;(await cookieStore).set({ name, value: '', ...options })
         },
       },
     }
   )
 }
 
-function escapeHtml(value) {
+function escapeHtml(value: unknown): string {
   return String(value)
     .replaceAll('&', '&amp;')
     .replaceAll('<', '&lt;')
@@ -60,11 +61,17 @@ function escapeHtml(value) {
     .replaceAll("'", '&#039;')
 }
 
-export async function POST(req) {
+interface FeedbackRequestBody {
+  feedbackText?: unknown
+  niche?: unknown
+  platform?: unknown
+}
+
+export async function POST(req: Request) {
   try {
-    let body
+    let body: FeedbackRequestBody | undefined
     try {
-      body = await req.json()
+      body = await req.json() as FeedbackRequestBody
     } catch {
       return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
     }
@@ -89,11 +96,10 @@ export async function POST(req) {
     }
 
     const bearerToken = getBearerToken(req)
-    const cookieStore = cookies()
 
     const supabase = bearerToken
       ? createSupabaseFromBearerToken(bearerToken)
-      : createSupabaseFromCookies(cookieStore)
+      : await createSupabaseFromCookies()
 
     const {
       data: { user },
